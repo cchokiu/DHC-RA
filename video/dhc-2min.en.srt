@@ -1,14 +1,55 @@
+1
+00:00:00,300 --> 00:00:04,700
 District Health Centres: why they exist, in two minutes
+
+2
+00:00:05,300 --> 00:00:09,120
 In 2017, the Policy Address announced a first pilot in Kwai Tsing
+
+3
+00:00:09,720 --> 00:00:17,120
 Press releases tracked each step: contract, 11 interim centres, the Blueprint
+
+4
+00:00:17,720 --> 00:00:28,980
 Officials say the system leans too heavily on treatment
+
+5
+00:00:29,580 --> 00:00:33,980
 Primary care was described as fragmented
+
+6
+00:00:34,580 --> 00:00:45,450
 The 2022 Blueprint: shift from treatment and hospitals to prevention and families
+
+7
+00:00:46,050 --> 00:00:57,450
 Five policy directions and 17 recommendations
+
+8
+00:00:58,050 --> 00:01:07,450
 In the Blueprint's system chart, DHCs sit at the centre as a district hub
+
+9
+00:01:08,050 --> 00:01:19,450
 Integration runs two ways: vertical referrals and medical-social collaboration
+
+10
+00:01:20,050 --> 00:01:30,200
 Hospitals, clinics and family doctors each have a role; DHCs prevent and coordinate
+
+11
+00:01:30,800 --> 00:01:42,700
 Chronic disease co-care (2023): DHCs coordinate, family doctors screen and manage
+
+12
+00:01:43,300 --> 00:01:54,550
 Governance: the Primary Healthcare Commission sets standards; DHCs are a service provider
+
+13
+00:01:55,150 --> 00:01:59,630
 Today: 10 centres, 8 interim centres, over 100 service points
+
+14
+00:02:00,230 --> 00:02:06,980
 Inference: a platform linking services, not another clinic. Government sources only.

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""由 scenes.html + narration.txt 生成有廣東話旁白同燒入字幕嘅 dhc-1min.mp4。
+"""由 scenes.html + narration.txt 生成有廣東話旁白同燒入字幕嘅 dhc-2min.mp4。
 
 語音來源（逐幕揀，優先次序）：
   1. voice/s<N>.(wav|mp3|m4a) —— 自己錄嘅旁白
   2. sherpa-onnx vits-cantonese —— 離線神經網絡粵語女聲，首次自動由 GitHub 下載模型（約 110MB）到 models/
   3. Edge TTS zh-HK-HiuMaanNeural —— 需要網絡可以連到 speech.platform.bing.com
   4. espeak-ng yue —— 離線、機械聲，只作示範
-每幕長度 = max(原定秒數, 旁白長度 + 0.8 秒)。字幕：dhc-1min.srt（中）＋ dhc-1min.en.srt（英）。
+每幕長度 = max(原定秒數, 旁白長度 + 0.8 秒)。字幕：dhc-2min.srt（中）＋ dhc-2min.en.srt（英）。
 依賴：pip install sherpa-onnx opencc-python-reimplemented
 """
 import array, asyncio, os, re, shutil, subprocess, sys, tempfile, wave
@@ -14,8 +14,8 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 CHROME = "/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell"
-SCENES = ["s1", "s2", "news", "s3", "s4", "s5", "s6", "s7", "s8"]  # scenes.html 嘅 id，次序同 narration.txt 每行對應
-BASE_DUR = [5, 4, 8, 10, 5, 6, 10, 4, 4]
+SCENES = ["s1", "s2", "news", "s3", "s4", "bp1", "bp2", "s5", "bp3", "s6", "bp4", "bp5", "s7", "s8"]  # scenes.html 嘅 id，次序同 narration.txt 每行對應
+BASE_DUR = [5, 4, 8, 10, 5, 10, 12, 10, 12, 10, 12, 10, 4, 4]
 LEAD = 0.3  # 每幕開始後幾耐先出聲
 BG = "0x000000"  # 舊片式淡入淡出黑畫面
 FONT = "WenQuanYi Zen Hei"
@@ -136,9 +136,9 @@ def main():
         srt_en.append((t0 + LEAD, t0 + d - 0.3, en[i - 1]))
         t0 += d
 
-    (HERE / "dhc-1min.srt").write_text(
+    (HERE / "dhc-2min.srt").write_text(
         "\n".join(f"{n}\n{ts(a)} --> {ts(b)}\n{s}\n" for n, (a, b, s) in enumerate(srt, 1)), encoding="utf-8")
-    (HERE / "dhc-1min.en.srt").write_text(
+    (HERE / "dhc-2min.en.srt").write_text(
         "\n".join(f"{n}\n{ts(a)} --> {ts(b)}\n{s}\n" for n, (a, b, s) in enumerate(srt_en, 1)), encoding="utf-8")
     (tmp / "list.txt").write_text("".join(f"file '{c}'\n" for c in clips))
     joined = tmp / "joined.mp4"
@@ -149,23 +149,23 @@ def main():
     en_style = "FontName=DejaVu Sans,FontSize=8,Outline=1,Shadow=0,BorderStyle=1,MarginV=10"
     vhs = "rgbashift=rh=-3:bh=3,gblur=sigma=0.9,noise=alls=6:allf=t,eq=saturation=0.9:contrast=1.05,scale=1280:720"
     run("ffmpeg", "-y", "-i", str(joined), "-vf",
-        f"{vhs},subtitles={HERE / 'dhc-1min.srt'}:force_style='{zh}',"
-        f"subtitles={HERE / 'dhc-1min.en.srt'}:force_style='{en_style}'",
+        f"{vhs},subtitles={HERE / 'dhc-2min.srt'}:force_style='{zh}',"
+        f"subtitles={HERE / 'dhc-2min.en.srt'}:force_style='{en_style}'",
         "-c:v", "libx264", "-preset", "slow", "-crf", "27", "-c:a", "copy",
-        "-movflags", "+faststart", str(HERE / "dhc-1min.mp4"))
+        "-movflags", "+faststart", str(HERE / "dhc-2min.mp4"))
 
     # 每幕中段各抽一格，砌成總覽圖檢查字幕位置
     ends = [0.0]
     for c in clips:
         ends.append(ends[-1] + duration(c))
     for i in range(len(clips)):
-        run("ffmpeg", "-y", "-ss", str((ends[i] + ends[i + 1]) / 2), "-i", str(HERE / "dhc-1min.mp4"),
+        run("ffmpeg", "-y", "-ss", str((ends[i] + ends[i + 1]) / 2), "-i", str(HERE / "dhc-2min.mp4"),
             "-frames:v", "1", str(tmp / f"f{i + 1}.png"))
-    run("ffmpeg", "-y", "-i", str(tmp / "f%d.png"), "-vf", "scale=640:-1,tile=3x3:padding=8:color=gray",
+    run("ffmpeg", "-y", "-i", str(tmp / "f%d.png"), "-vf", "scale=640:-1,tile=4x4:padding=8:color=gray",
         "-frames:v", "1", str(HERE / "contact.png"))
 
     shutil.rmtree(tmp)
-    print(f"語音：{'、'.join(sorted(used))}；總長 {duration(HERE / 'dhc-1min.mp4'):.1f} 秒")
+    print(f"語音：{'、'.join(sorted(used))}；總長 {duration(HERE / 'dhc-2min.mp4'):.1f} 秒")
 
 
 if __name__ == "__main__":
