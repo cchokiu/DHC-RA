@@ -46,4 +46,5 @@ description: Make short explainer / tutorial videos (MP4) about Hong Kong Distri
 - **色調**：改 `scenes.html` 開頭 `:root` 嘅變數，深藍底 `#16256a`、米白字 `#f4edd4`、黃色重點 `#ffd866`、青色點 `#8fd3c6`。
 - **VHS 效果**：改 `build.py` 入面嘅 `vhs` 字串，包括色偏、柔焦、雜訊同解像度。
 - **雙語字幕**：中文樣式改 `zh`，英文樣式改 `en`。想淨係要中文字幕，就刪走最後合成嗰度第二個 `subtitles` filter。
-- **換聲**：將錄音放喺 `<project>/voice/<id>.m4a`，會優先使用。普通話就換一個 sherpa 普通話模型，再將 `zh` 寫成普通話稿。
+- **換聲**：將錄音放喺 `<project>/voice/<id>.m4a`，會優先使用。
+- **普通話版**：`scenes.json` 加 `"lang": "cmn"`，`zh` 改寫成書面普通話稿（用繁體字，聽落係普通話）。`scenes.html` 要複製一份，將畫面上嘅粵語字（點解、點樣、唔係、嘅）改成普通話寫法。例子喺 `video/cmn/`。普通話模型 `vits-melo-tts-zh_en` 約 180MB，同樣首次自動下載；Mandarin 稿比粵語稿長，全片大約長 5–10%。
