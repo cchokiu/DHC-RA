@@ -1,63 +1,77 @@
 <!doctype html>
 <html><head><meta charset="utf-8">
 <style>
-:root{--bg:#fbfaf7;--fg:#22201c;--muted:#6b665d;--accent:#8a4b2a;--soft:#f3e9e1;--inf:#f6efdc;--infline:#d8c48a;--line:#e4e0d6}
+/* 仿舊香港教育片：深藍底、米白粗字、青色點陣 */
+:root{--bg:#16256a;--fg:#f4edd4;--muted:#b9b39b;--accent:#ffd866;--dot:#8fd3c6;--line:#5868a8;--paper:#ece2c6;--ink:#2a2418}
 *{box-sizing:border-box;margin:0}
-html,body{width:1920px;height:1080px;overflow:hidden;background:var(--bg);color:var(--fg);font-family:"WenQuanYi Zen Hei","Noto Sans TC",sans-serif}
-.scene{display:none;position:absolute;inset:0;padding:110px 150px 0}
+html,body{width:1920px;height:1080px;overflow:hidden;background:var(--bg);color:var(--fg);font-family:"WenQuanYi Zen Hei",sans-serif;font-weight:bold}
+body:after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,20,.55) 100%);pointer-events:none}
+.scene{display:none;position:absolute;inset:0;padding:100px 150px 0}
 .scene.on{display:block}
-.eyebrow{font-size:34px;letter-spacing:.12em;color:var(--accent);margin-bottom:24px}
-h1{font-size:96px;line-height:1.3}
-h2{font-size:62px;line-height:1.35;margin-bottom:40px}
-.sub{font-size:44px;color:var(--muted);margin-top:24px}
-.cap{position:absolute;left:150px;right:150px;bottom:90px;font-size:44px;line-height:1.6}
-.cap b{color:var(--accent)}
-.src{position:absolute;right:60px;bottom:30px;font-size:24px;color:var(--muted)}
-.rule{width:140px;height:8px;background:var(--accent);margin:36px 0}
+.eyebrow{font-size:36px;letter-spacing:.3em;color:var(--dot);margin-bottom:24px}
+h1{font-size:104px;line-height:1.3;letter-spacing:.08em}
+h2{font-size:70px;line-height:1.35;margin-bottom:40px;letter-spacing:.08em;text-align:center}
+.center{text-align:center}
+.sub{font-size:48px;color:var(--muted);margin-top:24px;letter-spacing:.15em}
+.cap{position:absolute;left:150px;right:150px;font-size:36px;color:var(--muted);text-align:center}
+.src{position:absolute;right:60px;bottom:30px;font-size:24px;color:var(--muted);font-weight:normal}
+.rule{width:180px;height:8px;background:var(--accent);margin:40px auto}
+.dots{display:flex;gap:22px;justify-content:center;margin-top:50px}
+.dots i{width:20px;height:20px;border-radius:50%;background:var(--dot)}
 /* timeline */
 .tl{display:flex;justify-content:space-between;position:relative;margin-top:80px}
 .tl:before{content:"";position:absolute;left:40px;right:40px;top:36px;height:6px;background:var(--line)}
 .node{position:relative;width:380px;text-align:center}
-.dot{width:78px;height:78px;border-radius:50%;background:var(--soft);border:6px solid var(--accent);margin:0 auto 22px}
-.node.big .dot{background:var(--accent)}
-.node .y{font-size:46px;font-weight:bold;color:var(--accent)}
-.node .t{font-size:32px;line-height:1.5;margin-top:10px}
+.dot{width:78px;height:78px;border-radius:50%;background:var(--bg);border:6px solid var(--dot);margin:0 auto 22px}
+.node.big .dot{background:var(--accent);border-color:var(--accent)}
+.node .y{font-size:48px;color:var(--accent)}
+.node .t{font-size:34px;line-height:1.5;margin-top:10px}
 /* stats */
 .row{display:flex;gap:60px;margin-top:20px}
-.card{flex:1;background:#fff;border:2px solid var(--line);border-left:12px solid var(--accent);border-radius:16px;padding:36px 44px}
-.card .k{font-size:34px;color:var(--muted)}
-.card .v{font-size:88px;font-weight:bold;color:var(--accent);line-height:1.3}
-.card .v small{font-size:44px;color:var(--fg)}
+.card{flex:1;border:4px solid var(--fg);padding:36px 44px}
+.card .k{font-size:36px;color:var(--muted)}
+.card .v{font-size:96px;color:var(--accent);line-height:1.3}
+.card .v small{font-size:46px;color:var(--fg)}
 /* boxes */
 .field{position:relative;height:560px}
-.box{position:absolute;width:300px;padding:26px 0;text-align:center;font-size:40px;background:var(--soft);border:3px solid var(--accent);border-radius:16px}
-.hub{position:absolute;left:660px;top:150px;width:300px;height:300px;border-radius:50%;background:var(--accent);color:#fff;font-size:72px;font-weight:bold;display:flex;align-items:center;justify-content:center}
-.tag{position:absolute;font-size:36px;background:var(--fg);color:var(--bg);border-radius:999px;padding:6px 26px}
+.box{position:absolute;width:300px;padding:26px 0;text-align:center;font-size:42px;border:4px solid var(--fg);background:var(--bg)}
+.hub{position:absolute;left:660px;top:150px;width:300px;height:300px;border-radius:50%;background:var(--accent);color:var(--bg);font-size:76px;display:flex;align-items:center;justify-content:center}
+.tag{position:absolute;font-size:36px;background:var(--dot);color:var(--bg);padding:6px 26px}
 svg.lines{position:absolute;inset:0}
 /* 4 cols */
 .cols{display:flex;gap:30px}
-.col{flex:1;background:#fff;border:2px solid var(--line);border-radius:16px;padding:40px 30px;min-height:420px}
-.col h3{font-size:44px;margin-bottom:24px}
-.col p{font-size:36px;line-height:1.6;color:var(--muted)}
-.col.me{background:var(--accent);border-color:var(--accent)}
-.col.me h3,.col.me p{color:#fff}
+.col{flex:1;border:4px solid var(--fg);padding:40px 30px;min-height:420px}
+.col h3{font-size:48px;margin-bottom:24px}
+.col p{font-size:38px;line-height:1.6;color:var(--muted)}
+.col.me{background:var(--fg);border-color:var(--fg)}
+.col.me h3,.col.me p{color:var(--bg)}
 /* big numbers */
-.nums{display:flex;gap:80px;align-items:flex-end;margin-top:30px}
-.num .v{font-size:200px;font-weight:bold;color:var(--accent);line-height:1}
-.num .k{font-size:44px;margin-top:16px}
+.nums{display:flex;gap:80px;align-items:flex-end;justify-content:center;margin-top:60px}
+.num{text-align:center}
+.num .v{font-size:210px;color:var(--accent);line-height:1}
+.num .k{font-size:46px;margin-top:16px}
 .plus{font-size:120px;color:var(--muted);padding-bottom:70px}
 /* inference */
-.infcard{background:var(--inf);border:3px dashed var(--infline);border-radius:20px;padding:60px 70px;margin-top:40px;font-size:60px;line-height:1.6}
-.inftag{display:inline-block;font-size:34px;color:#a4560a;border:3px solid var(--infline);border-radius:10px;padding:0 14px;margin-right:18px;vertical-align:middle}
-.note{font-size:40px;color:var(--muted);margin-top:50px}
+.infcard{border:5px dashed var(--accent);padding:60px 70px;margin-top:40px;font-size:62px;line-height:1.6}
+.inftag{display:inline-block;font-size:36px;color:var(--bg);background:var(--accent);padding:0 16px;margin-right:18px;vertical-align:middle}
+.note{font-size:42px;color:var(--muted);margin-top:50px;text-align:center}
+/* 剪報 */
+.clips{position:relative;height:720px}
+.clip{position:absolute;width:520px;background:var(--paper);color:var(--ink);padding:30px 34px 22px;box-shadow:10px 14px 0 rgba(0,0,0,.35);font-family:"AR PL UMing TW",serif;font-weight:normal;
+  background-image:linear-gradient(rgba(120,90,30,.08),rgba(120,90,30,.16)),repeating-linear-gradient(0deg,transparent 0 3px,rgba(0,0,0,.025) 3px 4px)}
+.clip .k{font-family:"WenQuanYi Zen Hei",sans-serif;font-size:22px;letter-spacing:.2em;border-bottom:3px double var(--ink);padding-bottom:8px;margin-bottom:14px}
+.clip h4{font-family:"WenQuanYi Zen Hei",sans-serif;font-size:46px;line-height:1.3;margin-bottom:14px}
+.clip p{font-size:30px;line-height:1.65;text-align:justify}
+.clip .f{font-size:21px;margin-top:14px;border-top:1px solid var(--ink);padding-top:8px;display:flex;justify-content:space-between}
 </style></head><body>
 
 <section class="scene" id="s1">
-  <div style="padding-top:170px">
-    <p class="eyebrow">一分鐘睇懂</p>
-    <h1>地區康健中心（DHC）</h1>
+  <div class="center" style="padding-top:200px">
+    <p class="eyebrow">一 分 鐘 睇 懂</p>
+    <h1>地區康健中心</h1>
     <div class="rule"></div>
-    <p class="sub">點解要有，做咩崗位</p>
+    <p class="sub">點解要有　做咩崗位</p>
+    <div class="dots"><i></i><i></i><i></i><i></i><i></i></div>
   </div>
 </section>
 
@@ -70,6 +84,31 @@ svg.lines{position:absolute;inset:0}
     <div class="node"><div class="dot"></div><div class="y">2022.12</div><div class="t">《藍圖》定位為<br>基層醫療樞紐</div></div>
   </div>
   <p class="src">[1][2][3][7][10]</p>
+</section>
+
+<section class="scene" id="news">
+  <p class="eyebrow">新聞剪報</p>
+  <div class="clips">
+    <div class="clip" style="left:0;top:40px;transform:rotate(-3deg)">
+      <p class="k">剪報・二〇一九年三月</p>
+      <h4>葵青地區康健中心<br>營運合約批出</h4>
+      <p>食物及衞生局向葵青安全社區健康城市協會批出營運合約，合約期三年。</p>
+      <p class="f"><span>政府新聞網</span><span>[3][4]</span></p>
+    </div>
+    <div class="clip" style="left:560px;top:120px;transform:rotate(2deg)">
+      <p class="k">剪報・二〇二一年四月</p>
+      <h4>十一區設立<br>地區康健站</h4>
+      <p>當局向十一間非政府機構批出合約，在十一區設立過渡性質的地區康健站。</p>
+      <p class="f"><span>政府新聞公報</span><span>[7]</span></p>
+    </div>
+    <div class="clip" style="left:1100px;top:30px;transform:rotate(-1.5deg)">
+      <p class="k">剪報・二〇二二年十二月</p>
+      <h4>《基層醫療<br>健康藍圖》發表</h4>
+      <p>藍圖提出五個政策方向及十七項建議，地區康健中心定位為基層醫療樞紐。</p>
+      <p class="f"><span>政府新聞公報</span><span>[1][10][11][20]</span></p>
+    </div>
+  </div>
+  <p class="src" style="top:110px;bottom:auto;right:150px">剪報為示意重製，內容據官方公報整理，非原文影像</p>
 </section>
 
 <section class="scene" id="s3">
@@ -99,7 +138,7 @@ svg.lines{position:absolute;inset:0}
   <p class="eyebrow">《藍圖》嘅答案</p>
   <h2 style="margin-bottom:0">雙重角色</h2>
   <div class="field" style="height:600px">
-    <svg class="lines" width="1620" height="600"><g stroke="#8a4b2a" stroke-width="5">
+    <svg class="lines" width="1620" height="600"><g stroke="#8fd3c6" stroke-width="6" stroke-dasharray="2 18" stroke-linecap="round">
       <line x1="230" y1="110" x2="810" y2="300"/><line x1="1390" y1="110" x2="810" y2="300"/>
       <line x1="230" y1="490" x2="810" y2="300"/><line x1="1390" y1="490" x2="810" y2="300"/></g></svg>
     <div class="box" style="left:80px;top:70px">公營基層</div>
@@ -133,7 +172,7 @@ svg.lines{position:absolute;inset:0}
     <div class="num"><p class="v">8</p><p class="k">間康健站</p></div>
     <div class="num" style="margin-left:60px"><p class="v">100+</p><p class="k">服務點</p></div>
   </div>
-  <p class="cap" style="font-size:36px;color:#6b665d;bottom:260px">2024 年基層醫療署取代辦事處，統籌公私營基層醫療</p>
+  <p class="cap" style="bottom:300px">2024 年基層醫療署取代辦事處，統籌公私營基層醫療</p>
   <p class="src">[14]–[18]</p>
 </section>
 

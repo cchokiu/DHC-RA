@@ -6,7 +6,7 @@
   2. sherpa-onnx vits-cantonese —— 離線神經網絡粵語女聲，首次自動由 GitHub 下載模型（約 110MB）到 models/
   3. Edge TTS zh-HK-HiuMaanNeural —— 需要網絡可以連到 speech.platform.bing.com
   4. espeak-ng yue —— 離線、機械聲，只作示範
-每幕長度 = max(原定秒數, 旁白長度 + 0.8 秒)。
+每幕長度 = max(原定秒數, 旁白長度 + 0.8 秒)。字幕：dhc-1min.srt（中）＋ dhc-1min.en.srt（英）。
 依賴：pip install sherpa-onnx opencc-python-reimplemented
 """
 import array, asyncio, os, re, shutil, subprocess, sys, tempfile, wave
@@ -14,9 +14,10 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 CHROME = "/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell"
-BASE_DUR = [5, 8, 10, 5, 6, 10, 4, 4]
+SCENES = ["s1", "s2", "news", "s3", "s4", "s5", "s6", "s7", "s8"]  # scenes.html 嘅 id，次序同 narration.txt 每行對應
+BASE_DUR = [5, 4, 8, 10, 5, 6, 10, 4, 4]
 LEAD = 0.3  # 每幕開始後幾耐先出聲
-BG = "0xfbfaf7"
+BG = "0x000000"  # 舊片式淡入淡出黑畫面
 FONT = "WenQuanYi Zen Hei"
 
 
@@ -111,9 +112,10 @@ def subtitle_chunks(text, start, length):
 
 def main():
     lines = [l.strip() for l in (HERE / "narration.txt").read_text(encoding="utf-8").splitlines() if l.strip()]
-    assert len(lines) == len(BASE_DUR), "narration.txt 要有 8 行"
+    assert len(lines) == len(BASE_DUR), f"narration.txt 要有 {len(BASE_DUR)} 行"
     tmp = Path(tempfile.mkdtemp())
-    srt, clips, t0, used = [], [], 0.0, set()
+    en = [l.strip() for l in (HERE / "narration_en.txt").read_text(encoding="utf-8").splitlines() if l.strip()]
+    srt, srt_en, clips, t0, used = [], [], [], 0.0, set()
 
     for i, text in enumerate(lines, 1):
         audio, src = tts(i, text, tmp)
@@ -122,38 +124,44 @@ def main():
         d = round(max(BASE_DUR[i - 1], a + LEAD + 0.5), 2)
         png, clip = tmp / f"s{i}.png", tmp / f"c{i}.mp4"
         run(CHROME, "--headless", "--no-sandbox", "--hide-scrollbars", "--window-size=1920,1080",
-            f"--screenshot={png}", f"file://{HERE}/scenes.html#s{i}")
+            f"--screenshot={png}", f"file://{HERE}/scenes.html#{SCENES[i - 1]}")
         run("ffmpeg", "-y", "-loop", "1", "-framerate", "30", "-t", str(d), "-i", str(png), "-i", str(audio),
             "-filter_complex",
             f"[0:v]fade=t=in:st=0:d=0.4:color={BG},fade=t=out:st={d - 0.4}:d=0.4:color={BG},format=yuv420p[v];"
-            f"[1:a]adelay={int(LEAD * 1000)}:all=1,aresample=44100,aformat=channel_layouts=stereo,apad,atrim=0:{d}[a]",
+            f"[1:a]adelay={int(LEAD * 1000)}:all=1,aresample=44100,aformat=channel_layouts=stereo,highpass=f=180,lowpass=f=6500,apad,atrim=0:{d}[a]",
             "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-r", "30",
             "-c:a", "aac", "-b:a", "128k", "-t", str(d), str(clip))
         clips.append(clip)
         srt += subtitle_chunks(text, t0 + LEAD, a)
+        srt_en.append((t0 + LEAD, t0 + d - 0.3, en[i - 1]))
         t0 += d
 
     (HERE / "dhc-1min.srt").write_text(
         "\n".join(f"{n}\n{ts(a)} --> {ts(b)}\n{s}\n" for n, (a, b, s) in enumerate(srt, 1)), encoding="utf-8")
+    (HERE / "dhc-1min.en.srt").write_text(
+        "\n".join(f"{n}\n{ts(a)} --> {ts(b)}\n{s}\n" for n, (a, b, s) in enumerate(srt_en, 1)), encoding="utf-8")
     (tmp / "list.txt").write_text("".join(f"file '{c}'\n" for c in clips))
     joined = tmp / "joined.mp4"
     run("ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(tmp / "list.txt"), "-c", "copy", str(joined))
 
-    style = (f"FontName={FONT},FontSize=15,PrimaryColour=&H00FFFFFF,BackColour=&H66000000,"
-             "BorderStyle=4,Outline=6,Shadow=0,MarginV=22")
+    # 舊教育片字幕：中文拉開字距，下面細字英文；畫面先加 VHS 色偏、柔焦、雜訊
+    zh = f"FontName={FONT},FontSize=13,Spacing=3,Outline=1,Shadow=0,BorderStyle=1,MarginV=26"
+    en_style = "FontName=DejaVu Sans,FontSize=8,Outline=1,Shadow=0,BorderStyle=1,MarginV=10"
+    vhs = "rgbashift=rh=-3:bh=3,gblur=sigma=0.9,noise=alls=6:allf=t,eq=saturation=0.9:contrast=1.05,scale=1280:720"
     run("ffmpeg", "-y", "-i", str(joined), "-vf",
-        f"subtitles={HERE / 'dhc-1min.srt'}:force_style='{style}'",
-        "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-c:a", "copy",
+        f"{vhs},subtitles={HERE / 'dhc-1min.srt'}:force_style='{zh}',"
+        f"subtitles={HERE / 'dhc-1min.en.srt'}:force_style='{en_style}'",
+        "-c:v", "libx264", "-preset", "slow", "-crf", "27", "-c:a", "copy",
         "-movflags", "+faststart", str(HERE / "dhc-1min.mp4"))
 
     # 每幕中段各抽一格，砌成總覽圖檢查字幕位置
     ends = [0.0]
     for c in clips:
         ends.append(ends[-1] + duration(c))
-    for i in range(8):
+    for i in range(len(clips)):
         run("ffmpeg", "-y", "-ss", str((ends[i] + ends[i + 1]) / 2), "-i", str(HERE / "dhc-1min.mp4"),
             "-frames:v", "1", str(tmp / f"f{i + 1}.png"))
-    run("ffmpeg", "-y", "-i", str(tmp / "f%d.png"), "-vf", "scale=640:-1,tile=4x2:padding=8:color=gray",
+    run("ffmpeg", "-y", "-i", str(tmp / "f%d.png"), "-vf", "scale=640:-1,tile=3x3:padding=8:color=gray",
         "-frames:v", "1", str(HERE / "contact.png"))
 
     shutil.rmtree(tmp)
