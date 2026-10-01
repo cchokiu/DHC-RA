@@ -3,16 +3,18 @@
 
 語音來源（逐幕揀，優先次序）：
   1. voice/s<N>.(wav|mp3|m4a) —— 自己錄嘅旁白
-  2. Edge TTS zh-HK-HiuMaanNeural —— 需要網絡可以連到 speech.platform.bing.com
-  3. espeak-ng yue —— 離線、機械聲，只作示範
+  2. sherpa-onnx vits-cantonese —— 離線神經網絡粵語女聲，首次自動由 GitHub 下載模型（約 110MB）到 models/
+  3. Edge TTS zh-HK-HiuMaanNeural —— 需要網絡可以連到 speech.platform.bing.com
+  4. espeak-ng yue —— 離線、機械聲，只作示範
 每幕長度 = max(原定秒數, 旁白長度 + 0.8 秒)。
+依賴：pip install sherpa-onnx opencc-python-reimplemented
 """
-import asyncio, os, re, shutil, subprocess, sys, tempfile
+import array, asyncio, os, re, shutil, subprocess, sys, tempfile, wave
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 CHROME = "/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell"
-BASE_DUR = [5, 9, 10, 8, 10, 10, 4, 4]
+BASE_DUR = [5, 8, 10, 5, 6, 10, 4, 4]
 LEAD = 0.3  # 每幕開始後幾耐先出聲
 BG = "0xfbfaf7"
 FONT = "WenQuanYi Zen Hei"
@@ -26,6 +28,41 @@ def duration(path):
     out = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration",
                           "-of", "csv=p=0", str(path)], capture_output=True, text=True, check=True)
     return float(out.stdout)
+
+
+MODEL = HERE / "models" / "vits-cantonese-hf-xiaomaiiwn"
+MODEL_URL = ("https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/"
+             "vits-cantonese-hf-xiaomaiiwn.tar.bz2")
+_sherpa = None
+
+
+def sherpa_tts(text, out):
+    """模型字典係簡體字，所以先轉簡體再合成（讀音不變）。"""
+    global _sherpa
+    try:
+        import sherpa_onnx
+        from opencc import OpenCC
+        if _sherpa is None:
+            if not MODEL.exists():
+                MODEL.parent.mkdir(exist_ok=True)
+                subprocess.run(f"curl -sL '{MODEL_URL}' | tar xj -C '{MODEL.parent}'", shell=True, check=True)
+            vits = sherpa_onnx.OfflineTtsVitsModelConfig(
+                model=str(MODEL / f"{MODEL.name}.onnx"), lexicon=str(MODEL / "lexicon.txt"),
+                tokens=str(MODEL / "tokens.txt"))
+            _sherpa = (sherpa_onnx.OfflineTts(sherpa_onnx.OfflineTtsConfig(
+                model=sherpa_onnx.OfflineTtsModelConfig(vits=vits, num_threads=4),
+                rule_fsts=str(MODEL / "rule.fst"))), OpenCC("t2s"))
+        engine, cc = _sherpa
+        audio = engine.generate(cc.convert(text), sid=0, speed=1.0)
+        pcm = array.array("h", (int(max(-1.0, min(1.0, s)) * 32767) for s in audio.samples))
+        with wave.open(str(out), "wb") as w:
+            w.setnchannels(1)
+            w.setsampwidth(2)
+            w.setframerate(audio.sample_rate)
+            w.writeframes(pcm.tobytes())
+        return True
+    except Exception:
+        return False
 
 
 def edge_tts(text, out):
@@ -45,10 +82,12 @@ def tts(i, text, tmp):
         own = HERE / "voice" / f"s{i}.{ext}"
         if own.exists():
             return own, "錄音"
+    wav = tmp / f"v{i}.wav"
+    if sherpa_tts(text, wav):
+        return wav, "sherpa-onnx 粵語"
     mp3 = tmp / f"v{i}.mp3"
     if edge_tts(text, mp3):
         return mp3, "Edge TTS"
-    wav = tmp / f"v{i}.wav"
     run("espeak-ng", "-v", "yue", "-s", "215", "-w", str(wav), text)
     return wav, "espeak-ng"
 
