@@ -47,4 +47,5 @@ description: Make short explainer / tutorial videos (MP4) about Hong Kong Distri
 - **VHS 效果**：改 `build.py` 入面嘅 `vhs` 字串，包括色偏、柔焦、雜訊同解像度。
 - **雙語字幕**：中文樣式改 `zh`，英文樣式改 `en`。想淨係要中文字幕，就刪走最後合成嗰度第二個 `subtitles` filter。
 - **換聲**：將錄音放喺 `<project>/voice/<id>.m4a`，會優先使用。
-- **普通話版**：`scenes.json` 加 `"lang": "cmn"`，`zh` 改寫成書面普通話稿（用繁體字，聽落係普通話）。`scenes.html` 要複製一份，將畫面上嘅粵語字（點解、點樣、唔係、嘅）改成普通話寫法。例子喺 `video/cmn/`。普通話模型 `vits-melo-tts-zh_en` 約 180MB，同樣首次自動下載；Mandarin 稿比粵語稿長，全片大約長 5–10%。
+- **普通話版**：`scenes.json` 加 `"lang": "cmn"`，`zh` 改寫成書面普通話稿（用繁體字，聽落係普通話）。`scenes.html` 要複製一份，將畫面上嘅粵語字（點解、點樣、唔係、嘅）改成普通話寫法。例子喺 `video/cmn/`。
+- **懷舊廣播聲**：`scenes.json` 加 `"voice": {"speed": 0.95, "fx": "radio80s"}`。`radio80s` 係 ffmpeg 後製（收窄頻帶、鼻音共鳴、壓縮、回響、轉速微晃、失真、底噪），唔改語音來源，所以粵語、普通話都用得。想用同一套畫面，就加 `"html": "../cmn/scenes.html"`。稿件可以加「各位聽眾，現在播送……」同「謝謝收聽」呢類播音腔開結語。例子喺 `video/cmn80s/`。後製係模擬音色，唔係真人播音員；想更似真，仍然要靠真人錄音或高質素 TTS 加呢個 effect。普通話模型 `vits-melo-tts-zh_en` 約 180MB，同樣首次自動下載；Mandarin 稿比粵語稿長，全片大約長 5–10%。
