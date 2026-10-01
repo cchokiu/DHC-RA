@@ -1,0 +1,152 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+:root{--bg:#fbfaf7;--fg:#22201c;--muted:#6b665d;--accent:#8a4b2a;--soft:#f3e9e1;--inf:#f6efdc;--infline:#d8c48a;--line:#e4e0d6}
+*{box-sizing:border-box;margin:0}
+html,body{width:1920px;height:1080px;overflow:hidden;background:var(--bg);color:var(--fg);font-family:"WenQuanYi Zen Hei","Noto Sans TC",sans-serif}
+.scene{display:none;position:absolute;inset:0;padding:110px 150px 0}
+.scene.on{display:block}
+.eyebrow{font-size:34px;letter-spacing:.12em;color:var(--accent);margin-bottom:24px}
+h1{font-size:96px;line-height:1.3}
+h2{font-size:62px;line-height:1.35;margin-bottom:40px}
+.sub{font-size:44px;color:var(--muted);margin-top:24px}
+.cap{position:absolute;left:150px;right:150px;bottom:90px;font-size:44px;line-height:1.6}
+.cap b{color:var(--accent)}
+.src{position:absolute;right:60px;bottom:30px;font-size:24px;color:var(--muted)}
+.rule{width:140px;height:8px;background:var(--accent);margin:36px 0}
+/* timeline */
+.tl{display:flex;justify-content:space-between;position:relative;margin-top:80px}
+.tl:before{content:"";position:absolute;left:40px;right:40px;top:36px;height:6px;background:var(--line)}
+.node{position:relative;width:380px;text-align:center}
+.dot{width:78px;height:78px;border-radius:50%;background:var(--soft);border:6px solid var(--accent);margin:0 auto 22px}
+.node.big .dot{background:var(--accent)}
+.node .y{font-size:46px;font-weight:bold;color:var(--accent)}
+.node .t{font-size:32px;line-height:1.5;margin-top:10px}
+/* stats */
+.row{display:flex;gap:60px;margin-top:20px}
+.card{flex:1;background:#fff;border:2px solid var(--line);border-left:12px solid var(--accent);border-radius:16px;padding:36px 44px}
+.card .k{font-size:34px;color:var(--muted)}
+.card .v{font-size:88px;font-weight:bold;color:var(--accent);line-height:1.3}
+.card .v small{font-size:44px;color:var(--fg)}
+/* boxes */
+.field{position:relative;height:560px}
+.box{position:absolute;width:300px;padding:26px 0;text-align:center;font-size:40px;background:var(--soft);border:3px solid var(--accent);border-radius:16px}
+.hub{position:absolute;left:660px;top:150px;width:300px;height:300px;border-radius:50%;background:var(--accent);color:#fff;font-size:72px;font-weight:bold;display:flex;align-items:center;justify-content:center}
+.tag{position:absolute;font-size:36px;background:var(--fg);color:var(--bg);border-radius:999px;padding:6px 26px}
+svg.lines{position:absolute;inset:0}
+/* 4 cols */
+.cols{display:flex;gap:30px}
+.col{flex:1;background:#fff;border:2px solid var(--line);border-radius:16px;padding:40px 30px;min-height:420px}
+.col h3{font-size:44px;margin-bottom:24px}
+.col p{font-size:36px;line-height:1.6;color:var(--muted)}
+.col.me{background:var(--accent);border-color:var(--accent)}
+.col.me h3,.col.me p{color:#fff}
+/* big numbers */
+.nums{display:flex;gap:80px;align-items:flex-end;margin-top:30px}
+.num .v{font-size:200px;font-weight:bold;color:var(--accent);line-height:1}
+.num .k{font-size:44px;margin-top:16px}
+.plus{font-size:120px;color:var(--muted);padding-bottom:70px}
+/* inference */
+.infcard{background:var(--inf);border:3px dashed var(--infline);border-radius:20px;padding:60px 70px;margin-top:40px;font-size:60px;line-height:1.6}
+.inftag{display:inline-block;font-size:34px;color:#a4560a;border:3px solid var(--infline);border-radius:10px;padding:0 14px;margin-right:18px;vertical-align:middle}
+.note{font-size:40px;color:var(--muted);margin-top:50px}
+</style></head><body>
+
+<section class="scene" id="s1">
+  <div style="padding-top:170px">
+    <p class="eyebrow">一分鐘睇懂</p>
+    <h1>地區康健中心（DHC）</h1>
+    <div class="rule"></div>
+    <p class="sub">點解要有，做咩崗位</p>
+  </div>
+</section>
+
+<section class="scene" id="s2">
+  <p class="eyebrow">由試點到樞紐</p>
+  <div class="tl">
+    <div class="node big"><div class="dot"></div><div class="y">2017.10</div><div class="t">施政報告宣布<br>葵青設首間試點</div></div>
+    <div class="node"><div class="dot"></div><div class="y">2019.03</div><div class="t">批出葵青<br>DHC 合約</div></div>
+    <div class="node"><div class="dot"></div><div class="y">2021.04</div><div class="t">11 區康健站<br>（過渡性質）</div></div>
+    <div class="node"><div class="dot"></div><div class="y">2022.12</div><div class="t">《藍圖》定位為<br>基層醫療樞紐</div></div>
+  </div>
+  <p class="cap">2017 年 10 月，施政報告宣布兩年內喺葵青設首間試點；<br>2022 年《藍圖》再將佢定位為<b>「基層醫療樞紐」</b>。</p>
+  <p class="src">[1][2][3][7][10]</p>
+</section>
+
+<section class="scene" id="s3">
+  <p class="eyebrow">官方診斷之一</p>
+  <h2>體系「高度偏重於治療」</h2>
+  <div class="row">
+    <div class="card"><p class="k">65 歲以上佔人口</p><p class="v">20%<small> → </small>31%</p><p class="k">2021 年 → 2039 年</p></div>
+    <div class="card"><p class="k">2019 年，65 歲以上</p><p class="v">18%<small> 人口</small></p><p class="k">卻佔住院及急症入院約一半</p></div>
+  </div>
+  <p class="src">[5][12]</p>
+</section>
+
+<section class="scene" id="s4">
+  <p class="eyebrow">官方診斷之二</p>
+  <h2>基層醫療「偏向零散」</h2>
+  <div class="field">
+    <div class="box" style="left:80px;top:60px;transform:rotate(-4deg)">公營基層</div>
+    <div class="box" style="left:700px;top:20px;transform:rotate(3deg)">私營醫生</div>
+    <div class="box" style="left:1260px;top:110px;transform:rotate(-2deg)">社福服務</div>
+    <div class="box" style="left:380px;top:300px;transform:rotate(5deg)">普通科門診</div>
+    <div class="box" style="left:1000px;top:320px;transform:rotate(-5deg)">社區組織</div>
+  </div>
+  <p class="cap">缺乏統籌，公私營同社福各自為政。</p>
+  <p class="src">[12]</p>
+</section>
+
+<section class="scene" id="s5">
+  <p class="eyebrow">《藍圖》嘅答案</p>
+  <h2 style="margin-bottom:0">雙重角色</h2>
+  <div class="field" style="height:600px">
+    <svg class="lines" width="1620" height="600"><g stroke="#8a4b2a" stroke-width="5">
+      <line x1="230" y1="110" x2="810" y2="300"/><line x1="1390" y1="110" x2="810" y2="300"/>
+      <line x1="230" y1="490" x2="810" y2="300"/><line x1="1390" y1="490" x2="810" y2="300"/></g></svg>
+    <div class="box" style="left:80px;top:70px">公營基層</div>
+    <div class="box" style="left:1240px;top:70px">私營醫療</div>
+    <div class="box" style="left:80px;top:450px">社會服務</div>
+    <div class="box" style="left:1240px;top:450px">社區組織</div>
+    <div class="hub">DHC</div>
+    <span class="tag" style="left:560px;top:90px">支援基層醫生</span>
+    <span class="tag" style="left:860px;top:470px">地區資源樞紐</span>
+  </div>
+  <p class="src">[5][12]</p>
+</section>
+
+<section class="scene" id="s6">
+  <p class="eyebrow">分工</p>
+  <h2>各有各做</h2>
+  <div class="cols">
+    <div class="col"><h3>醫管局</h3><p>急重症<br>專科治療</p></div>
+    <div class="col"><h3>普通科門診</h3><p>為弱勢社群<br>提供基層醫療</p></div>
+    <div class="col"><h3>家庭醫生</h3><p>私營診所<br>診症</p></div>
+    <div class="col me"><h3>DHC</h3><p>預防<br>穩定慢病<br>統籌轉介</p></div>
+  </div>
+  <p class="src">[5][13][15]</p>
+</section>
+
+<section class="scene" id="s7">
+  <p class="eyebrow">今日</p>
+  <div class="nums">
+    <div class="num"><p class="v">10</p><p class="k">間 DHC</p></div>
+    <div class="plus">＋</div>
+    <div class="num"><p class="v">8</p><p class="k">間康健站</p></div>
+    <div class="num" style="margin-left:60px"><p class="v">100+</p><p class="k">服務點</p></div>
+  </div>
+  <p class="cap" style="font-size:36px;color:#6b665d">2024 年基層醫療署取代辦事處，統籌公私營基層醫療</p>
+  <p class="src">[14]–[18]</p>
+</section>
+
+<section class="scene" id="s8">
+  <p class="eyebrow">點樣理解</p>
+  <div class="infcard"><span class="inftag">推</span>DHC 看來唔係多一間診所，<br>而係連結零散服務嘅平台。</div>
+  <p class="note">以上全屬政府自述，並非獨立評估。</p>
+  <p class="src">[2][5][6][12]</p>
+</section>
+
+<script>
+var id=(location.hash||'#s1').slice(1);document.getElementById(id).classList.add('on');
+</script>
+</body></html>
