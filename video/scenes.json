@@ -1,0 +1,89 @@
+{
+ "name": "dhc-2min",
+ "scenes": [
+  {
+   "id": "s1",
+   "min": 5,
+   "zh": "地區康健中心，兩分鐘話你知佢點解要有，同埋做咩崗位。",
+   "en": "District Health Centres: why they exist, in two minutes"
+  },
+  {
+   "id": "s2",
+   "min": 4,
+   "zh": "二零一七年，施政報告宣布喺葵青設首間試點。",
+   "en": "In 2017, the Policy Address announced a first pilot in Kwai Tsing"
+  },
+  {
+   "id": "news",
+   "min": 8,
+   "zh": "之後嘅新聞公報，記錄咗每一步：批出葵青合約、開設十一區康健站，再發表基層醫療藍圖。",
+   "en": "Press releases tracked each step: contract, 11 interim centres, the Blueprint"
+  },
+  {
+   "id": "s3",
+   "min": 10,
+   "zh": "政府話，醫療體系太偏重治療。長者人口比例，會由兩成升到三成一。二零一九年，長者只佔人口一成八，但住院同急症入院就佔咗大約一半。",
+   "en": "Officials say the system leans too heavily on treatment"
+  },
+  {
+   "id": "s4",
+   "min": 5,
+   "zh": "另一個問題，係基層醫療好零散，公私營同社福各自為政。",
+   "en": "Primary care was described as fragmented"
+  },
+  {
+   "id": "bp1",
+   "min": 10,
+   "zh": "二零二二年十二月，政府發表基層醫療健康藍圖。總方向係將醫療體系嘅重心，由偏重治療、以醫院為重心，轉向以預防為重、以家庭為中心。",
+   "en": "The 2022 Blueprint: shift from treatment and hospitals to prevention and families"
+  },
+  {
+   "id": "bp2",
+   "min": 12,
+   "zh": "藍圖提出五個政策方向、十七項建議：建立社區基層醫療系統、加強服務管理、整合資源、規劃人手，同改善數據互通及健康監測。",
+   "en": "Five policy directions and 17 recommendations"
+  },
+  {
+   "id": "s5",
+   "min": 10,
+   "zh": "喺藍圖嘅系統圖入面，地區康健中心企喺中間，一邊支援基層醫生，一邊做地區資源樞紐，連繫公營、私營、社福同社區組織。",
+   "en": "In the Blueprint's system chart, DHCs sit at the centre as a district hub"
+  },
+  {
+   "id": "bp3",
+   "min": 12,
+   "zh": "整合分兩條軸。縱向，慢性病個案按協定護理流程，喺基層、專科同醫院之間雙向轉介。橫向，就係醫社合作，協調同整合服務。",
+   "en": "Integration runs two ways: vertical referrals and medical-social collaboration"
+  },
+  {
+   "id": "s6",
+   "min": 10,
+   "zh": "分工上，醫管局負責急重症同專科，普通科門診照顧弱勢社群，家庭醫生負責診症，地區康健中心就做預防、穩定慢病同統籌。",
+   "en": "Hospitals, clinics and family doctors each have a role; DHCs prevent and coordinate"
+  },
+  {
+   "id": "bp4",
+   "min": 12,
+   "zh": "以慢性病為例，二零二三年推出慢性疾病共同治理先導計劃：地區康健中心統籌，家庭醫生篩查同管理，加上跨專業支援，由政府同市民共同承擔。",
+   "en": "Chronic disease co-care (2023): DHCs coordinate, family doctors screen and manage"
+  },
+  {
+   "id": "bp5",
+   "min": 10,
+   "zh": "管治方面，二零二四年基層醫療署取代辦事處，負責管治同訂標準。喺藍圖嘅架構圖入面，地區康健中心同衞生署、醫管局並列為服務提供者。",
+   "en": "Governance: the Primary Healthcare Commission sets standards; DHCs are a service provider"
+  },
+  {
+   "id": "s7",
+   "min": 4,
+   "zh": "而家全港有十間中心、八個康健站，超過一百個服務點。",
+   "en": "Today: 10 centres, 8 interim centres, over 100 service points"
+  },
+  {
+   "id": "s8",
+   "min": 4,
+   "zh": "睇落，佢唔係多一間診所，而係連結服務嘅平台。不過以上都係政府自述，唔係獨立評估。",
+   "en": "Inference: a platform linking services, not another clinic. Government sources only."
+  }
+ ]
+}
