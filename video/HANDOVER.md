@@ -12,6 +12,20 @@ claude        # 然後講：Read video/HANDOVER.md and execute it. Stop at each 
 
 API key 只放環境變數（`ELEVENLABS_API_KEY`、`KREA_API_KEY`），**唔好寫入任何檔案或 commit**。
 
+## 更新：之後新增嘅版本（先睇呢段）
+
+寫 handover 之後，雲端 session 又加咗：
+
+- `video/cmn/`：普通話版（離線 sherpa 語音），`scenes.json` 有 `"lang": "cmn"`。
+- `video/cmn80s/`：普通話＋八十年代內地廣播風，`voice: {"speed": 0.95, "fx": "radio80s"}`，畫面共用 `video/cmn/scenes.html`（`"html"` 欄）。
+- `build.py` 嘅 `tts()` 而家係 `tts(proj, lang, sid, text, tmp, speed)`；語音後製 `FX["radio80s"]` 係 ffmpeg，**同語音來源無關**，所以 ElevenLabs 出嘅音檔都可以套用。
+
+**建議次序**：普通話版比粵語版更適合先試 ElevenLabs，因為普通話係佢支援最穩陣嘅中文。
+1. 先做 `video/cmn/`（普通話）：測試聲、緩存、出片。
+2. 再試 `video/` 粵語版，過咗上面「關口 A」先做。
+3. `cmn80s`：ElevenLabs 聲＋`radio80s` 後製；ElevenLabs 自己嘅聲音風格唔一定似舊廣播，後製參數可再調。
+4. 每個版本分開 `voice_cache/`（或者 cache key 已含 text/model/voice，咁就唔會撞）。
+
 ## 現況（已完成）
 
 - 一條 127 秒、14 幕嘅 DHC 講解片：`video/dhc-2min.mp4`，舊香港教育片風格，粵語旁白用離線 sherpa-onnx（機械味重，所以要升級），中英字幕燒入。
